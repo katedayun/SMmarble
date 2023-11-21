@@ -44,12 +44,13 @@ void printGrades(int player); //print all the grade history of the player
 #endif
 
 
-void generate players(int n, int initEnergy){
+void generatePlayers(int n, int initEnergy){
 	//we assume n number of players are playing inside so n number for loop is neccessary
 	int i;
-	 
+	for(i=0;i<n;i++){
+	
 	//input name
-	printf();
+	printf("Enter player name:");
 	scanf("%s",player_name[i]);
 	//user number? i indicating 
 	
@@ -58,8 +59,12 @@ void generate players(int n, int initEnergy){
 	//initial position should be 0
 	
 	//set energy
-	plyer_energy[i]=initEnergy ;
+	player_energy[i]=initEnergy ;
 }
+
+}
+
+//error fixed for "for loop" absent,,, maybe lost in the class ...
 int rolldie(int player)
 {
     char c;
@@ -109,7 +114,7 @@ int main(int argc, const char * argv[]) {
     if ((fp = fopen(BOARDFILEPATH,"r")) == NULL)
     {
         printf("[ERROR] failed to open %s. This file should be in the same directory of SMMarble.exe.\n", BOARDFILEPATH);
-        getchar();
+        //getchar();
         return -1;
     }
     
@@ -120,15 +125,19 @@ int main(int argc, const char * argv[]) {
 	//so real data name should be stored ; data encapsulation neccessary
     {
         //store the parameter set
-        smmObj_genNOode(name, type, credit, energy);
+        smmObj_genNode(name, type, credit, energy);
         board_nr++;
     
     }
     fclose(fp);
     printf("Total number of board nodes : %i\n", board_nr);
     
-    for (i=0;i<board_nr;i++)
-		printf("node %i: %s, %i\n",i,smmObj_getNodeName(i), smmObj_getNodeType(i),smmObj_getTypeName(SMMNODE_TYPE_LECTURE)); 
+    int i; 
+    //integer must be declared...
+    for (i=0;i<board_nr;i++){
+	
+		printf("node %i: %s, %i\n",i,smmObj_getNodeName(i), smmObj_getNodeType(i)); 
+		//,smmObj_getTypeName(SMMNODE_TYPE_LECTURE) why is this added:???? some meaning contain definetly...
     
     #if 0 
     //2. food card config 
@@ -177,7 +186,9 @@ int main(int argc, const char * argv[]) {
     }
     while (player_nr<0 || player>MAX_PLAYER);
     //if player number is sth like a or b (else of number or excess the 100.. sth error should occur)--> condition do while used
-
+	
+	int initEnergy=100;
+	//define initial energy neccessary
     generatePlayers(player_nr, initEnergy);
      
     
