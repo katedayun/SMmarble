@@ -14,7 +14,7 @@
 #define MAX_NODE 		100
 
 //vary name --> 2dimensional setting : recognizing the name of the route
-static char smmNodeName[SMMNODE_TYPE_MAX][MAX_CHARNAME]{
+static char smmNodeName[SMMNODE_TYPE_MAX][MAX_CHARNAME]={
 	"lecture"
 	"restaurant"
 	"lab"
@@ -23,14 +23,15 @@ static char smmNodeName[SMMNODE_TYPE_MAX][MAX_CHARNAME]{
 	"food chance"
 	"festival"
 };
+//expected "="
 //all letter should be under 200/ so max char name  meaning
 // smm node number would be 7 but indicated w/ type max
 
 //반환하는 문자열??? 
-char smmObj_getTypeName(int type){
-	return smmNodeName[type];
+//char smmObj_getTypeName(int type){
+//	return smmNodeName[type];
 	// 2dimensional setting but the second one is empty/ only first one is filled [type]
-}
+//}
  
 static char smmObj_name[MAX_NODE][MAX_CHARNAME];
 //character name 2D matrix storage 
@@ -58,12 +59,12 @@ void smmObj_genNode(char* name, int type, int credit, int energy)
 
 char* Obj_getNodeName(int node_nr)
 {
-	retrun smmObj_name[smmObj_noNode];
+	return smmObj_name[smmObj_noNode];
 }
 //몇번쨰??? 
 int smmObj_getNodeType(int node_nr)
 {
-	retrun smmObj_type[node_nr];]
+	return smmObj_type[node_nr];
 }
 //credit enerrgy similar to right above re make!
 
@@ -73,13 +74,13 @@ int smmObj_getNodeType(int node_nr)
 
 
 //element to string
-char* smmObj_getNodeName(smmNode_e type)
+char* smmObj_getNodeName(int node_nr)
 {
-    return smmNodeName[type];
+    return smmNodeName[node_nr];
 }
 
-char* smmObj_getGradeName(smmGrade_e grade)
+char* smmObj_getGradeName(int node_nr)
 {
-    return smmGradeName[grade];
+    return smmGradeName[node_nr];
 }
-
+//IS that right to change to node_nr....? istead form smm_e_grade or sth... Iguess not but... 
