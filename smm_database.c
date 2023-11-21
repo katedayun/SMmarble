@@ -12,12 +12,14 @@
 #define MAX_LIST            LISTNO_OFFSET_GRADE+MAX_PLAYER
 
 //node definition for linked list
-typedef struct node{
-    int index;      //index of the node
-    void* obj;      //object data
-    void* next;         //pointer to the next
-    void* prev;         //pointer to the next
+typedef struct node {
+    int index;
+    struct node* next;
+    struct node* prev;
+    void* obj;
 } node_t;
+//Pointer Types for next and prev:......ADVICE PROVISION
+//In struct node, next and prev should be of type node_t*, not void*.(PREVIOUS COMPARISON)
 
 
 static node_t* list_database[MAX_LIST];
