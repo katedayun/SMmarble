@@ -31,17 +31,17 @@ static char player_position[MAX_PLAYER];
 static char player_name[MAX_PLAYER][MAX_CHARNAME];
 
 //function prototypes
-#if 0
+
 int isGraduated(void); //check if any player is graduated
 void generatePlayers(int n, int initEnergy); //generate a new player
 void printGrades(int player); //print grade history of the player
 void goForward(int player, int step); //make player go "step" steps on the board (check if player is graduated)
 void printPlayerStatus(void); //print all player status at the beginning of each turn
 float calcAverageGrade(int player); //calculate average grade of the player
-smmGrade_e takeLecture(int player, char *lectureName, int credit); //take the lecture (insert a grade of the player)
+//smmGrade_e takeLecture(int player, char *lectureName, int credit); //take the lecture (insert a grade of the player)
 void* findGrade(int player, char *lectureName); //find the grade from the player's grade history
 void printGrades(int player); //print all the grade history of the player
-#endif
+
 
 
 void generatePlayers(int n, int initEnergy){
@@ -84,9 +84,79 @@ int rolldie(int player)
 //action code when a player stays at a node
 void actionNode(int player)
 {
-    switch(type)
-    {
-        //case lecture:
+	int nodeType = nodes[player_position[player]].type;
+     switch (nodeType) {
+        case LECTURE: {
+            // Lecture node logic
+            if (player_energy[player] >= energyRequiredForLecture) {
+                // Check if the lecture is not already taken
+                if (!isLectureTaken(player, lectureName)) {
+                    // Option to take the lecture or drop
+                    char decision;
+                    printf("Player %s at lecture node. Take lecture? (y/n): ", player_name[player]);
+                    scanf(" %c", &decision);
+                    if (decision == 'y' || decision == 'Y') {
+                        smmGrade_e grade = takeLecture(player, lectureName, lectureCredit);
+                        printf("Player %s took the lecture and received grade: %d\n", player_name[player], grade);
+                    }
+                } else {
+                    printf("Player %s has already taken this lecture.\n", player_name[player]);
+                }
+            } else {
+                printf("Player %s does not have enough energy to take the lecture.\n", player_name[player]);
+            }
+            break;
+        }
+        case RESTAURANT: {
+            // Restaurant node logic
+            int energyBoost = getRestaurantEnergyBoost(restaurantName); // Implement this function
+            player_energy[player] += energyBoost;
+            printf("Player %s visited the restaurant and gained %d energy.\n", player_name[player], energyBoost);
+            break;
+        }
+         case LAB:
+            // Lab node logic
+            if (playerInExperiment[player]) {  // Assuming a flag indicating if the player is in an experiment
+                if (rollForExperimentSuccess()) {  // Implement this function for experiment success check
+                    printf("Player %s succeeded in the experiment.\n", player_name[player]);
+                    playerInExperiment[player] = 0;  // Exit experiment state
+                } else {
+                    printf("Player %s failed in the experiment and remains in the lab.\n", player_name[player]);
+                }
+            } else {
+                printf("Player %s is in the lab but not in an experiment.\n", player_name[player]);
+            }
+            break;
+
+        case HOME:
+            // Home node logic
+            player_energy[player] += homeEnergyBoost;  // Define homeEnergyBoost as needed
+            printf("Player %s visited home and gained %d energy.\n", player_name[player], homeEnergyBoost);
+            break;
+
+        case GO_TO_LAB:
+            // Go to Lab node logic
+            playerInExperiment[player] = 1;  // Set the player to be in an experiment state
+            printf("Player %s is heading to the lab for an experiment.\n", player_name[player]);
+            // Implement logic to move player to the lab
+            break;
+
+        case FOOD_CHANCE:
+            // Food Chance node logic
+            // Implement logic for random food card selection and energy boost
+            break;
+
+        case FESTIVAL:
+            // Festival node logic
+            // Implement logic for random festival card selection and mission execution
+            break;
+
+        default:
+            printf("Player %s landed on an unrecognized node type.\n", player_name[player]);
+            break;
+    }
+}
+        	
         default:
             break;
     }
