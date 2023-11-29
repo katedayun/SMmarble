@@ -29,6 +29,18 @@
     foodChance,
     festival
 */
+//directly noticing by define 
+#define SMMGRADE_TYPE_Aplus 0
+#define SMMGRADE_TYPE_A0 1
+#define SMMGRADE_TYPE_Aminus 2
+#define SMMGRADE_TYPE_Bplus 3
+#define SMMGRADE_TYPE_B0 4
+#define SMMGRADE_TYPE_Bminus 5
+#define SMMGRADE_TYPE_Cplus 6
+#define SMMGRADE_TYPE_C0 7
+#define SMMGRADE_TYPE_Cminus 8
+
+#define SMMGRADE_TYPE_MAX 9
 
 
 /* grade :

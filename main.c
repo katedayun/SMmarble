@@ -10,6 +10,9 @@
 #include "smm_object.h"
 #include "smm_database.h"
 #include "smm_common.h"
+#include "smm_database.c"
+#include "smm_object.c"
+
 
 #define BOARDFILEPATH "marbleBoardConfig.txt"
 #define FOODFILEPATH "marbleFoodConfig.txt"
@@ -38,7 +41,7 @@ void printGrades(int player); //print grade history of the player
 void goForward(int player, int step); //make player go "step" steps on the board (check if player is graduated)
 void printPlayerStatus(void); //print all player status at the beginning of each turn
 float calcAverageGrade(int player); //calculate average grade of the player
-//smmGrade_e takeLecture(int player, char *lectureName, int credit); //take the lecture (insert a grade of the player)
+smmGrade_e takeLecture(int player, char *lectureName, int credit); //take the lecture (insert a grade of the player)
 void* findGrade(int player, char *lectureName); //find the grade from the player's grade history
 void printGrades(int player); //print all the grade history of the player
 
@@ -84,9 +87,9 @@ int rolldie(int player)
 //action code when a player stays at a node
 void actionNode(int player)
 {
-	int nodeType = nodes[player_position[player]].type;
+	int nodeType = node_t[player_position[player]].type;
      switch (nodeType) {
-        case LECTURE: {
+        case lecture: {
             // Lecture node logic
             if (player_energy[player] >= energyRequiredForLecture) {
                 // Check if the lecture is not already taken

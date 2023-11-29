@@ -13,6 +13,7 @@
 #define MAX_GRADE       9
 #define MAX_NODE 		100
 
+
 //vary name --> 2dimensional setting : recognizing the name of the route
 static char smmNodeName[SMMNODE_TYPE_MAX][MAX_CHARNAME]={
 	"lecture"
@@ -26,6 +27,81 @@ static char smmNodeName[SMMNODE_TYPE_MAX][MAX_CHARNAME]={
 //expected "="
 //all letter should be under 200/ so max char name  meaning
 // smm node number would be 7 but indicated w/ type max
+
+// Define smmGradeName
+static char smmGradeName[SMMGRADE_TYPE_MAX][MAX_CHARNAME] = {
+    "A+",
+    "A0",
+    "A-",
+    "B+",
+    "B0",
+    "B-",
+    "C+",
+    "C0",
+    "C-"
+};
+typedef enum {
+    GRADE_A_PLUS,
+    GRADE_A0,
+    GRADE_A_MINUS,
+    GRADE_B_PLUS,
+    GRADE_B0,
+    GRADE_B_MINUS,
+    GRADE_C_PLUS,
+    GRADE_C0,
+    GRADE_C_MINUS,
+    GRADE_F
+} smmGrade_e;
+
+//READING THE TXT FILE
+typedef struct {
+    char name[MAX_CHARNAME];
+    int type;
+    int minCredit;
+    int maxCredit;
+} Lecture;
+
+#define MAX_LECTURES 100
+Lecture lectures[MAX_LECTURES];
+int totalLectures = 0;
+
+void readMarbleBoardConfig() {
+    FILE *file = fopen("marbleBoardConfig.txt", "r");
+    char line[256];
+    while (fgets(line, sizeof(line), file)) {
+        if (sscanf(line, "%s %d %d %d", lectures[totalLectures].name, &lectures[totalLectures].type, &lectures[totalLectures].minCredit, &lectures[totalLectures].maxCredit) == 4) {
+            totalLectures++;
+            if (totalLectures >= MAX_LECTURES) break;
+        }
+    }
+    fclose(file);
+}
+
+smmGrade_e takeLecture(int player, char *lectureName, int credit) {
+	int i;
+    for ( i = 0; i < totalLectures; i++) {
+        if (strcmp(lectures[i].name, lectureName) == 0) {
+            if (credit >= lectures[i].minCredit && credit <= lectures[i].maxCredit) {
+                // Assuming logic to determine grade based on credit
+                // Placeholder logic: the higher the credit, the better the grade
+                int range = lectures[i].maxCredit - lectures[i].minCredit;
+                int gradeIndex = (credit - lectures[i].minCredit) * MAX_GRADE / range;
+                return gradeIndex < MAX_GRADE ? gradeIndex : MAX_GRADE - 1;
+            } else {
+                return GRADE_F; // F grade if credit is outside bounds
+            }
+        }
+    }
+    return GRADE_F; // F grade if lecture not found
+}
+
+
+
+
+
+
+
+
 
 //반환하는 문자열??? 
 //char smmObj_getTypeName(int type){
@@ -56,7 +132,7 @@ void smmObj_genNode(char* name, int type, int credit, int energy)
 	//start from noNode = 0 up to number of integers... charging....
 	smmObj_noNode++;
 }
-
+//READ OUT
 char* Obj_getNodeName(int node_nr)
 {
 	return smmObj_name[smmObj_noNode];
@@ -79,8 +155,10 @@ char* smmObj_getNodeName(int node_nr)
     return smmNodeName[node_nr];
 }
 
-char* smmObj_getGradeName(int node_nr)
+char* smmObj_getGradeName(smmGrade_e grade)
 {
-    return smmGradeName[node_nr];
+    return smmGradeName[grade];
 }
 //IS that right to change to node_nr....? istead form smm_e_grade or sth... Iguess not but... 
+//-->RETURN TO INTIAL CODE
+
