@@ -46,7 +46,109 @@ void* findGrade(int player, char *lectureName); //find the grade from the player
 void printGrades(int player); //print all the grade history of the player
 
 
+//  
+int main(){
+	
 
+ FILE* fp;
+    char name[MAX_CHARNAME];
+    int type;
+    int credit;
+    int energy;
+    
+	board_nr = 0;
+    food_nr = 0;
+    festival_nr = 0;
+    
+    srand(time(NULL));
+    
+    //1. import parameters ---------------------------------------------------------------------------------
+    //1-1. boardConfig 
+    if ((fp = fopen("marbleBoardConfig","r")) == NULL)
+    {
+        printf("[ERROR] failed to open %s. This file should be in the same directory of SMMarble.exe.\n", BOARDFILEPATH);
+        //getchar();
+        return -1;
+    }
+    
+    printf("Reading board component......\n");
+    while (fscanf(fp,"%s %i %i %i",name, &type, &credit, &energy)==4) //read a node parameter set 전자기학 # # # / 
+	//scanf reads the number of data  ==4
+	//int above defined : abstract data..just define a place 
+	//so real data name should be stored ; data encapsulation neccessary
+    {
+        //store the parameter set
+        smmObj_genNode(name, type, credit, energy);
+        board_nr++;
+    
+    }
+    fclose(fp);
+    printf("Total number of board nodes : %i\n", board_nr);
+    
+    int i; 
+    //integer must be declared...
+    for (i=0;i<board_nr;i++){
+	
+		printf("node %i: %s, %i\n",i,smmObj_getNodeName(i), smmObj_getNodeType(i)); 
+		//,smmObj_getTypeName(SMMNODE_TYPE_LECTURE) why is this added:???? some meaning contain definetly...
+    
+    #if 0 
+    //2. food card config 
+    if ((fp = fopen("marbleFoodConfig","r")) == NULL)
+    {
+        printf("[ERROR] failed to open %s. This file should be in the same directory of SMMarble.exe.\n", FOODFILEPATH);
+        return -1;
+    }
+    
+    printf("\n\nReading food card component......\n");
+    while () //read a food parameter set
+    {
+        //store the parameter set
+    }
+    fclose(fp);
+    printf("Total number of food cards : %i\n", food_nr);
+    
+    
+    
+    //3. festival card config 
+    if ((fp = fopen("marbleFestivalConfig","r")) == NULL)
+    {
+        printf("[ERROR] failed to open %s. This file should be in the same directory of SMMarble.exe.\n", FESTFILEPATH);
+        return -1;
+    }
+    
+    printf("\n\nReading festival card component......\n");
+    while () //read a festival card string
+    {
+        //store the parameter set
+    }
+    fclose(fp);
+    printf("Total number of festival cards : %i\n", festival_nr);
+    
+    
+    
+    //2. Player configuration ---------------------------------------------------------------------------------
+    
+    do
+    {
+        //input player number to player_nr
+            printf("input player number:");
+    		scanf("%d",&player_nr);
+    		fflush(stdin);
+    		//keyboard stream buffer empty process/ since when datas had been input example '\n' input , maybe leftover sth in buffer
+    }
+    while (player_nr<0 || player>MAX_PLAYER);
+    //if player number is sth like a or b (else of number or excess the 100.. sth error should occur)--> condition do while used
+	
+	int initEnergy=100;
+	//define initial energy neccessary
+    generatePlayers(player_nr, initEnergy);
+    //
+#endif
+}
+}
+
+    
 void generatePlayers(int n, int initEnergy){
 	//we assume n number of players are playing inside so n number for loop is neccessary
 	int i;
@@ -87,9 +189,9 @@ int rolldie(int player)
 //action code when a player stays at a node
 void actionNode(int player)
 {
-	int nodeType = node_t[player_position[player]].type;
+	int nodeType = nodes[player_position[player]].type;
      switch (nodeType) {
-        case lecture: {
+        case LECTURE: {
             // Lecture node logic
             if (player_energy[player] >= energyRequiredForLecture) {
                 // Check if the lecture is not already taken
@@ -167,8 +269,7 @@ void actionNode(int player)
 
 
 
-int main(int argc, const char * argv[]) {
-    
+     
     FILE* fp;
     char name[MAX_CHARNAME];
     int type;
@@ -181,10 +282,9 @@ int main(int argc, const char * argv[]) {
     
     srand(time(NULL));
     
-    
     //1. import parameters ---------------------------------------------------------------------------------
     //1-1. boardConfig 
-    if ((fp = fopen(BOARDFILEPATH,"r")) == NULL)
+    if ((fp = fopen("marbleBoardConfig","r")) == NULL)
     {
         printf("[ERROR] failed to open %s. This file should be in the same directory of SMMarble.exe.\n", BOARDFILEPATH);
         //getchar();
@@ -214,7 +314,7 @@ int main(int argc, const char * argv[]) {
     
     #if 0 
     //2. food card config 
-    if ((fp = fopen(FOODFILEPATH,"r")) == NULL)
+    if ((fp = fopen("marbleFoodConfig","r")) == NULL)
     {
         printf("[ERROR] failed to open %s. This file should be in the same directory of SMMarble.exe.\n", FOODFILEPATH);
         return -1;
@@ -231,7 +331,7 @@ int main(int argc, const char * argv[]) {
     
     
     //3. festival card config 
-    if ((fp = fopen(FESTFILEPATH,"r")) == NULL)
+    if ((fp = fopen(","r")) == NULL)
     {
         printf("[ERROR] failed to open %s. This file should be in the same directory of SMMarble.exe.\n", FESTFILEPATH);
         return -1;

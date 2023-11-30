@@ -14,9 +14,11 @@
 #define MAX_NODE 		100
 
 
+
+
 //vary name --> 2dimensional setting : recognizing the name of the route
 static char smmNodeName[SMMNODE_TYPE_MAX][MAX_CHARNAME]={
-	"lecture"
+	"LECTURE"
 	"restaurant"
 	"lab"
 	"home"
@@ -60,22 +62,23 @@ typedef struct {
     int minCredit;
     int maxCredit;
 } Lecture;
+ 
+typedef struct {
+    char name[MAX_CHARNAME];
+    int type;
+    int minCredit;
+    int maxCredit;
+} Node;
+
+extern Node nodes[MAX_NODE];
+
+Node nodes[MAX_NODE];  
 
 #define MAX_LECTURES 100
 Lecture lectures[MAX_LECTURES];
 int totalLectures = 0;
 
-void readMarbleBoardConfig() {
-    FILE *file = fopen("marbleBoardConfig.txt", "r");
-    char line[256];
-    while (fgets(line, sizeof(line), file)) {
-        if (sscanf(line, "%s %d %d %d", lectures[totalLectures].name, &lectures[totalLectures].type, &lectures[totalLectures].minCredit, &lectures[totalLectures].maxCredit) == 4) {
-            totalLectures++;
-            if (totalLectures >= MAX_LECTURES) break;
-        }
-    }
-    fclose(file);
-}
+
 
 smmGrade_e takeLecture(int player, char *lectureName, int credit) {
 	int i;
